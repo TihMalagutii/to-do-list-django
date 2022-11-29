@@ -1,0 +1,52 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<div class="card">
+    <a href="{% url 'disciplinas' %}">Voltar</a>
+    <div class="card-header text-center">
+        <h1>Disciplina: {{disciplina}}</h1>
+        <a href="{% url 'criar-tarefa' %}">
+            <button type="button" class="btn btn-outline-primary">
+                Add tarefa
+            </button>
+        </a>
+        {% if countTarefas > 0 %}
+            <h5 class="mt-2">Voce tem <i>{{countTarefas}}</i> tarefa{{ countTarefas|pluralize:"s" }} incompleta{{ countTarefas|pluralize:"s" }}</h5>
+        {% else %}
+            <h5 class="mt-2">Sem tarefa pendente</h5>
+        {% endif %}
+    </div>
+    <div class="card-body">
+
+        <ul class="list-group">
+            {% for tarefa in tarefas %}
+                {% if tarefa.complete %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge bg-success rounded-pill">&nbsp;</span>
+                        <s>{{tarefa.title}}</s>
+                    </div>
+                    <div>
+                        <a class="btn btn-outline-warning btn-sm" href="{% url 'editar-tarefa' tarefa.id %}">Editar</a>
+                        <a class="btn btn-outline-danger btn-sm" href="{% url 'excluir-tarefa' tarefa.id%}">Excluir</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge bg-danger rounded-pill">&nbsp;</span>
+                        {{tarefa.title}}
+                    </div>
+                    <div>
+                        <a class="btn btn-outline-warning btn-sm" href="{% url 'editar-tarefa' tarefa.id %}">Editar</a>
+                        <a class="btn btn-outline-danger btn-sm" href="{% url 'excluir-tarefa' tarefa.id%}">Excluir</a>
+                    </div>
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,68 @@
+{% extends 'base/main.html' %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header text-center">
+        <h1>Minhas disciplinas</h1>
+        <a href="{% url 'criar-disciplina' %}">
+            <button type="button" class="btn btn-outline-primary">
+                Add disciplina
+            </button>
+        </a>
+
+        {% if count > 0 %}
+            <h5 class="mt-2">Voce tem <i>{{count}}</i> disciplina{{ count|pluralize:"s" }} incompleta{{ count|pluralize:"s" }}</h5>
+        {% else %}
+            <h5 class="mt-2">Sem disciplina pendente</h5>
+        {% endif %}
+
+        {% if user.is_staff %}
+            <span><a href="{% url 'downloadpdf' %}">Imprimir</a> lista de disciplinas de todos os usuarios</span>
+        {% endif %}
+        
+    </div>
+    <div class="card-body">
+
+        <form method="GET" class="input-group mb-3">
+            <input type="text" name="area-pesquisar" value="{{input_pesquisar}}" class="form-control" placeholder="Pesquisar" aria-label="Pesquisar" aria-describedby="campoPesquisar">
+            <button class="btn btn-outline-success" type="submit" id="campoPesquisar">Pesquisar</button>
+        </form>
+
+        <ul class="list-group">
+            {% for disciplina in disciplinas %}
+                {% if disciplina.complete %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-success rounded-pill">&nbsp;</span>
+                            <s>{{disciplina.title}}</s>
+                        </div>
+                        <div>
+                            <a class="btn btn-outline-primary btn-sm" href="{% url 'disciplina' disciplina.id %}">Ver</a>
+                            <a class="btn btn-outline-warning btn-sm" href="{% url 'editar-disciplina' disciplina.id %}">Editar</a>
+                            <a class="btn btn-outline-danger btn-sm" href="{% url 'excluir-disciplina' disciplina.id%}">Excluir</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-danger rounded-pill">&nbsp;</span>
+                            {{disciplina.title}}
+                        </div>
+                        <div>
+                            <a class="btn btn-outline-primary btn-sm" href="{% url 'disciplina' disciplina.id %}">Ver</a>
+                            <a class="btn btn-outline-warning btn-sm" href="{% url 'editar-disciplina' disciplina.id %}">Editar</a>
+                            <a class="btn btn-outline-danger btn-sm" href="{% url 'excluir-disciplina' disciplina.id%}">Excluir</a>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+    </div>
+    <div class="card-footer text-muted text-center">
+        <span>Desenvolvido por: Tiago Jose Malaguti</span>
+    </div>
+</div>
+
+{% endblock content %}
+
